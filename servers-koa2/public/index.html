@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 20px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Food Review App Test Page</h1>
+  <p>Click the button to test the API connection to the backend.</p>
+  <button onclick="testApi()">Test API</button>
+  <div id="result">Result will appear here.</div>
+
+  <script>
+    async function testApi() {
+      const resultDiv = document.getElementById('result');
+      resultDiv.textContent = 'Loading...';
+
+      try {
+        const response = await fetch('http://localhost:3000/api/users/1', {
+          method: 'GET'
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        resultDiv.textContent = JSON.stringify(data, null, 2);
+      } catch (error) {
+        resultDiv.textContent = `Error: ${error.message}`;
+        console.error('API Test Error:', error);
+      }
+    }
+  </script>
+</body>
+</html>
