@@ -28,18 +28,45 @@ class ShopService {
 
   async getShops() {
     const [rows] = await pool.query(
-      'SELECT shop_id, shop_name, address, latitude, longitude, business_hours, avg_price, discount_info, contact_phone, follower_count, created_at FROM Shops'
+      'SELECT shop_id, shop_name, address, latitude, longitude, business_hours, avg_price, discount_info, contact_phone, follower_count, created_at, image_url FROM Shops'
     );
     return rows;
   }
 
   async getShop(shopId) {
     const [rows] = await pool.query(
-      'SELECT shop_id, shop_name, address, latitude, longitude, business_hours, avg_price, discount_info, contact_phone, follower_count, created_at FROM Shops WHERE shop_id = ?',
+      'SELECT shop_id, shop_name, address, latitude, longitude, business_hours, avg_price, discount_info, contact_phone, follower_count, created_at, image_url FROM Shops WHERE shop_id = ?',
       [shopId]
     );
     if (!rows.length) throw new Error('Shop not found');
     return rows[0];
+  }
+
+  async searchShops(keyword) {
+    // 通用搜索：在店铺名称和地址中搜索关键字
+    const [rows] = await pool.query(
+      'SELECT shop_id, shop_name, address, latitude, longitude, business_hours, avg_price, discount_info, contact_phone, created_at, follower_count, image_url FROM Shops WHERE shop_name LIKE ? OR address LIKE ?',
+      [`%${keyword}%`, `%${keyword}%`]
+    );
+    return rows;
+  }
+
+  async searchShopsByName(name) {
+    // 按店铺名称搜索
+    const [rows] = await pool.query(
+      'SELECT shop_id, shop_name, address, latitude, longitude, business_hours, avg_price, discount_info, contact_phone, follower_count, created_at, image_url FROM Shops WHERE shop_name LIKE ?',
+      [`%${name}%`]
+    );
+    return rows;
+  }
+
+  async searchShopsByAddress(address) {
+    // 按地址搜索
+    const [rows] = await pool.query(
+      'SELECT shop_id, shop_name, address, latitude, longitude, business_hours, avg_price, discount_info, contact_phone, follower_count, created_at, image_url FROM Shops WHERE address LIKE ?',
+      [`%${address}%`]
+    );
+    return rows;
   }
 }
 

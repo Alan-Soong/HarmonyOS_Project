@@ -37,7 +37,7 @@ class FollowingShopsService {
 
   async getFollowedShops(user_id) {
     const [rows] = await pool.query(
-      'SELECT s.shop_id, s.shop_name, s.address, s.latitude, s.longitude, s.business_hours, s.avg_price, s.discount_info, s.contact_phone, s.follower_count, s.created_at ' +
+      'SELECT s.shop_id, s.shop_name, s.address, s.latitude, s.longitude, s.business_hours, s.avg_price, s.discount_info, s.contact_phone, s.follower_count, s.created_at, s.image_url ' +
       'FROM Shops s JOIN Following_Shops fs ON s.shop_id = fs.shop_id WHERE fs.user_id = ?',
       [user_id]
     );
